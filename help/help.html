@@ -1,0 +1,264 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="shortcut icon" href="../images/icon.png" />
+    <style>
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            font-size: 1.5vw;
+            font-family: sans-serif;
+            user-select: none
+        }
+
+        table {
+            width: 100%;
+            height: 100%;
+            border-collapse: collapse
+        }
+
+        #tdSideBar {
+            width: 20%;
+            vertical-align: top;
+            position: fixed;
+            left: 0;
+            top: 0
+        }
+
+        #tdContent {
+            width: 80%;
+            vertical-align: top;
+            padding: 1vw;
+            font-size: 1.5vw;
+            text-align: justify
+        }
+
+        a {
+            background-image: linear-gradient(to bottom right, #004080, #0080c0);
+            padding: 1vw;
+            font-size: 1.5vw;
+            color: white;
+            width: 90%;
+            display: block;
+            text-decoration: none
+        }
+
+        span {
+            font-weight: bold;
+            text-decoration: underline
+        }
+
+        img {
+            width: 75%;
+            margin: 1vw
+        }
+
+        #specs {
+            width: 50%;
+            font-size: 1.25vw
+        }
+
+        #specs td {
+            border: 1px solid black;
+            padding: .5vw
+        }
+    </style>
+    <script></script>
+</head>
+
+<body oncontextmenu="return false">
+    <table>
+        <tr>
+            <td id="tdSideBar">
+                <a href="#thanks">Thanks</a>
+                <a href="#overview">Overview</a>
+                <a href="#tones">Play an Instrument</a>
+                <a href="#band">Playing with Backing Band</a>
+                <a href="#chord">Chord</a>
+                <a href="#midi">MIDI Controller</a>
+                <a href="#troubleshooting">Troubleshooting</a>
+                <a href="#specifications">Specifications</a>
+                <a href="#about">About</a>
+            </td>
+            <td id="tdContent">
+                <p>
+                <h1 id="thanks">Thank you very much!</h1>
+                Sincerely thank you for downloading and using <span>Music Arranger Keyboard</span> app of
+                Telerzine!<br />
+                We hope you will have a lot of fun with this app.<br />
+                To make use of this app effectively, please read this manual carefully.
+                </p>
+                <hr />
+                <p>
+                <h1 id="overview">What is this app?</h1>
+                <img src="main.png" /><br />
+                <span>Music Arranger Keyboard</span> is a music keyboard app with the support of accompaniment from a
+                virtual band.
+                In other words, you have a whole band in your pocket and can play together with this virtual band
+                anytime, anywhere.
+                </p>
+                <hr />
+                <p>
+                <h1 id="tones">To play an Instrument</h1>
+                First choose the type of instrument you want to play by tapping one of the buttons in the Instruments
+                section.
+                Then press some keys in the Tone Keyboard section to emit the sound of that instrument.<br />
+                <img src="tones.png" />
+                <h2>How to play extremely low or extremely high notes?</h2>
+                Because of the very limited size of the phone screen, we cannot display all the keys (a total of 88
+                keys).
+                You can drag the green rectangle as below to display the remaining keys.<br />
+                <img src="green_mask.png" />
+                <h2>Using Bend</h2>
+                At the same time, you can use Bend on the left side to bend the pitch of the notes.<br />
+                <img src="bend.png" /><br />
+                Slide your finger up or down in this section to bend the note high or low. The Bend's range is 2
+                semitones.
+                </p>
+                <hr />
+                <p>
+                <h1 id="band">Playing with Backing Band</h1>
+                The virtual band is the strength of this app.
+                As shown below, first select the type of rhythm you want, then adjust the tempo of the rhythm.<br />
+                <img src="rhythm.png" /><br />
+                There are 2 ways for the virtual band to start playing.<br />
+                <ol>
+                    <li>Tap the Start button to play immediately.<br />
+                        <img src="start.png" />
+                    </li>
+                    <li>
+                        Or first tap the Sync Start button, so this button's text turn yellow.
+                        Then press at least 3 fingers in Accompaniment Keyboard section to form a chord.<br />
+                        <img src="sync.png" />
+                    </li>
+                </ol>
+                <h2>Control the Flow</h2>
+                <img src="flow.png" /><br />
+                The four buttons above are used as follows:<br />
+                <ul>
+                    <li><b>Break</b> - Make the band play a Tacet.</li>
+                    <li><b>A</b> - Used for the session (normal).</li>
+                    <li><b>B</b> - Used for chorus (variation).</li>
+                    <li><b>Ending</b> - Make the band play the last Bar, and then full stop.</li>
+                </ul>
+                Press the Stop button so the band stopped playing immediately.<br />
+                <img src="stop.png" /><br />
+                The Reset button is used for Tutti or used to reset to the first beat of the bar.<br />
+                <img src="reset.png" />
+                </p>
+                <hr />
+                <p>
+                <h1 id="chord">Chord</h1>
+                To make the bass player play the bass line you want, you must specify a chord by pressing at least 3
+                keys in Accompaniment Keyboard section.<br />
+                <img src="chord.png" /><br />
+                If you want only the drum player, remove the chord by tapping the area as illustrated below, so its text
+                changes to "No Chord Detected".<br />
+                <img src="only_drum.png" />
+                </p>
+                <hr />
+                <p>
+                <h1 id="midi">Play with Midi Controller</h1>
+                <img src="real.jpg" /><br />
+                <span>Music Arranger Keyboard</span> has the ability to connect to external hardware, namely midi
+                controllers.
+                You can play notes through these outer keyboards.
+                Not only that, you can change to another instrument and control the flow from your controller.<br />
+                Once connected, your Controller name will be displayed on the top of the app screen.<br />
+                <img src="connected.png" /><br />
+                Tap on your MIDI Controller's name to open the Mapping screen.<br />
+                <img src="controller.png" /><br />
+                In the illustration above, the left column is the functions that your controller can control, the right
+                column is the "Control Change (CC)" numbers.
+                To change this CC number, click the corresponding button in the right column, then press a Control on
+                your Hardware.<br />
+                <img src="learn.png" />
+                </p>
+                <hr />
+                <p>
+                <h1 id="troubleshooting">Troubleshooting</h1>
+                <h4>Why does the sound emit jerking and not smooth?</h4>
+                → <span>Music Arranger Keyboard</span> is an app that requires a lot of hardware resources.
+                The app may be a bit lag when it is started, but it will be smoother after that.
+                If this situation continues, you can try to turn off other apps, update the system, or even try to
+                restart the device.
+                <h4>Abnormal/Unstable Tempo.</h4>
+                → Abnormal Tempo can occur when the app has just started, but then will stabilize.
+                If this lasts, you can try to exit other apps, updating the system, or even trying to restart your
+                device.
+                <h4>Why is the sound delayed?</h4>
+                → For the best sound quality, please use wired connections.
+                The use of Bluetooth connectivity can make the sound delay.
+                <h4>I have connected my MIDI Controller to the app. Why does the app not show its name but show "No Midi
+                    Controller Detected"?</h4>
+                → You can try to restart the app.
+                If the app still does not recognize your Midi Controller, it may be the app and your hardware that is
+                not compatible with each other.
+                <h4>The app screen is all white.</h4>
+                → You can try to restart the app.
+                If this error still exists, please try updating the software on your device and then try again.
+                <h4>The app is constantly stopped.</h4>
+                → Please update the software on your device to the latest version.
+                Or you can try deleting the data of this app and then try again.
+                </p>
+                <hr />
+                <p>
+                <h1 id="specifications">Specifications</h1>
+                <table id="specs">
+                    <tr>
+                        <td style="width:50%">Keyboard</td>
+                        <td>88 keys</td>
+                    </tr>
+                    <tr>
+                        <td>Tone Keyboard</td>
+                        <td>2.5 Octaves</td>
+                    </tr>
+                    <tr>
+                        <td>Accompaniment Keyboard</td>
+                        <td>1.5 Octaves</td>
+                    </tr>
+                    <tr>
+                        <td>Polyphony</td>
+                        <td>256</td>
+                    </tr>
+                    <tr>
+                        <td>Instruments</td>
+                        <td>10</td>
+                    </tr>
+                    <tr>
+                        <td>DSP</td>
+                        <td>Simple Reverb</td>
+                    </tr>
+                    <tr>
+                        <td>Chord Mode</td>
+                        <td>3-Fingers</td>
+                    </tr>
+                    <tr>
+                        <td>Flow</td>
+                        <td>Break, A/Fill A, B/Fill B, Synchro/Ending, Start/Stop</td>
+                    </tr>
+                    <tr>
+                        <td>MIDI</td>
+                        <td>Only MIDI-in to control Functions</td>
+                    </tr>
+                    <tr>
+                        <td>Other Functions</td>
+                        <td>Pitch Bend 2 Semitones, Reset to the 1st Beat</td>
+                    </tr>
+                </table>
+                </p>
+                <hr />
+                <p>
+                <h1 id="about">About</h1>
+                © 2024 THT. All rights reserved.
+                </p>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

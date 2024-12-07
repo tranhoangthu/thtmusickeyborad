@@ -1,0 +1,180 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>THT Music Arranger Keyboard</title>
+    <link rel="shortcut icon" href="images/icon.png" />
+    <link rel="stylesheet" href="styles/index.css" />
+    <script src="tones/reverb.js"></script>
+    <script src="scripts/webmidi.iife.js"></script>
+    <script src="tones/soundfont-player.min.js"></script>
+    <script src="rhythms/howler.min.js"></script>
+    <script src="rhythms/chords.js"></script>
+    <script src="rhythms/rhythms.js"></script>
+    <script src="tones/tones.js"></script>
+    <script src="scripts/keyboards.js"></script>
+    <script>/*<![CDATA[*/var isAllLoaded = false; var isInterAdLoaded = false; var isAdShown = false; var numOfStops = 0; function interAdLoaded() { isInterAdLoaded = true; }
+        function interAdFailed() { isInterAdLoaded = false; }
+        function adShown() { isAdShown = true; }
+        var redZone = []; var greenZone = []; var keyTracker; const TRACKER_PERIOD = 10; var isResizing = false; var tableTones; var spanExMIDI; var spanChord; var chord = { name: "", root: "", third: "", fifth: "" }; var chordTracker; var btnBreak, btnV1, btnV2, btnEnd, btnStart, btnReset; var btnTempoDown, btnTempoUp; var btnPrevious, btnNext; var spanTempo, spanRhythm; var rhythmTracker; const buttonStateIndexes = [0, 7, 15, 23, 31, 39, 47, 55]; const buttonStates = ["red", "transparent", "yellow", "transparent", "yellow", "transparent", "yellow", "transparent"]; var btnBlink; var divMapping, tableMapping; var MappingFunctionButtons = []; var MappingCCButtons = []; var MappingCCs = []; var isMapping = false, isLearning = false; var learningIndex = 0; var divPress, divPressContent; var divHelp; var btnHelp, btnHelpClose; var isViewHelp = false; document.addEventListener("DOMContentLoaded", function () {
+            divTwin = document.getElementById("divTwin"); divTransport = document.getElementById("divTransport"); document.getElementById("tableTones").style.height = document.getElementById("tableRhythms").style.height = (divTransport.offsetHeight - (2 * document.getElementsByClassName("divTitles")[0].offsetHeight)) / 2; keyboard0 = document.getElementById("divWhole"); keyboard1 = document.getElementById("divKey1"); keyboard2 = document.getElementById("divKey2"); AcmpSection = document.getElementById("divAcmpSection"); ToneSection = document.getElementById("divToneSection"); redMask = document.getElementById("divRedMask"); greenMask = document.getElementById("divGreenMask"); wheels = document.getElementById("divWheels"); pitch = document.getElementById("divPitch"); pitchUpper = document.getElementById("divUpper"); pitchMid = document.getElementById("divMid"); pitchLower = document.getElementById("divLower"); wheelValue = document.getElementById("divWheelValue"); btnBlink = document.getElementById("btnV1"); divMapping = document.getElementById("divMapping"); divPress = document.getElementById("divPress"); divPress.addEventListener("click", function () { isLearning = false; this.style.visibility = "hidden"; }); divPressContent = document.getElementById("divPressContent"); divPressContent.style.left = (document.body.offsetWidth - divPressContent.offsetWidth) / 2; divPressContent.style.top = (document.body.offsetHeight - divPressContent.offsetHeight) / 2; tableTones = document.getElementById("tableTones"); let tr = document.createElement("tr"); for (let i = 0; i < Tones.length; i++) {
+                let td = document.createElement("td"); td.style.width = Math.floor(100 / Tones.length) + "%"; let currentButton = document.createElement("button"); currentButton.innerText = Tones[i].name; currentButton.classList.add("btnTone"); currentButton.setAttribute("idx", i); currentButton.addEventListener("click", function () {
+                    let thisIndex = parseInt(this.getAttribute("idx")); for (let j = 0; j < Tones.length; j++)
+                        Tones[j].button.style.backgroundImage = "linear-gradient(to bottom, rgb(0, 64, 32) , rgb(0, 128, 64))"; this.style.backgroundImage = "linear-gradient(to bottom, rgb(0, 128, 64) , rgb(0, 224, 128))"; currentTone = Tones[thisIndex];
+                }); Tones[i].button = currentButton; MappingFunctionButtons.push(currentButton); td.appendChild(currentButton); tr.appendChild(td);
+            }
+            tableTones.appendChild(tr); Tones[0].button.style.backgroundImage = "linear-gradient(to bottom, rgb(0, 128, 64), rgb(0, 224, 128))"; spanExMIDI = document.getElementById("spanExMIDI"); spanExMIDI.addEventListener("click", function () { if (this.innerText == "No MIDI Controller Detected") return; isMapping = true; divMapping.style.visibility = "visible"; }); document.getElementById("btnMappingClose").addEventListener("click", function () { isMapping = false; divMapping.style.visibility = "hidden"; repositionKeyboards(); }); spanChord = document.getElementById("spanChord"); spanChord.addEventListener("click", function () { chord.name = ""; this.innerText = "No Chord Detected"; }); btnBreak = document.getElementById("btnBreak"); btnV1 = document.getElementById("btnV1"); btnV2 = document.getElementById("btnV2"); btnEnd = document.getElementById("btnEnd"); btnStart = document.getElementById("btnStart"); btnReset = document.getElementById("btnReset"); btnTempoDown = document.getElementById("btnTempoDown"); btnTempoUp = document.getElementById("btnTempoUp"); btnPrevious = document.getElementById("btnPrevious"); btnNext = document.getElementById("btnNext"); spanTempo = document.getElementById("spanTempo"); spanRhythm = document.getElementById("spanRhythm"); divHelp = document.getElementById("divHelp"); btnHelp = document.getElementById("btnHelp"); btnHelpClose = document.getElementById("btnHelpClose"); btnHelpClose.addEventListener("click", function () { isViewHelp = false; divHelp.style.visibility = "hidden"; repositionKeyboards(); }); btnHelp.addEventListener("click", function () { isViewHelp = true; divHelp.style.visibility = "visible"; }); MappingFunctionButtons.push(btnBreak); MappingFunctionButtons.push(btnV1); MappingFunctionButtons.push(btnV2); MappingFunctionButtons.push(btnEnd); MappingFunctionButtons.push(btnStart); MappingFunctionButtons.push(btnReset); for (let i = 0; i < MappingFunctionButtons.length; i++) { let currentCC = localStorage.getItem("CC" + i); if (!currentCC) currentCC = 0; MappingCCs.push(currentCC); }
+            tableMapping = document.getElementById("tableMapping"); for (let i = 0; i < MappingFunctionButtons.length; i++) { let tr = document.createElement("tr"); let td1 = document.createElement("td"); let td1btn = document.createElement("button"); td1btn.classList.add("spanMappingFunctionButtons"); td1btn.innerText = MappingFunctionButtons[i].innerText; td1.appendChild(td1btn); let td2 = document.createElement("td"); td2.innerText = ":"; let td3 = document.createElement("td"); let td3btn = document.createElement("button"); td3btn.setAttribute("index", i); td3btn.innerText = MappingCCs[i]; td3btn.addEventListener("click", function () { isLearning = true; learningIndex = this.getAttribute("index"); divPress.style.visibility = "visible"; }); td3.appendChild(td3btn); MappingCCButtons.push(td3btn); tr.appendChild(td1); tr.appendChild(td2); tr.appendChild(td3); tableMapping.appendChild(tr); }
+            renderKeyboard0(); renderKeyboard1(); renderKeyboard2(); setMasks(); repositionWheels(); ToneSectionRectCalc(); pitch.addEventListener("touchstart", function (e) { isPitchDraged = true; }); pitch.addEventListener("mousedown", function (e) { isPitchDraged = true; }); pitch.addEventListener("touchmove", function (e) {
+                e.preventDefault(); if (isPitchDraged) {
+                    let diff; for (let i = 0; i < e.touches.length; i++)
+                        if (e.touches[i].target == this) { diff = e.touches[i].clientY - this.offsetTop; break; }
+                    if (diff < 0) diff = 0; if (diff > 2 * centerPitch) diff = 2 * centerPitch; pitchValue = Math.round((centerPitch - diff) * 10 / centerPitch) / 10;
+                }
+            }); pitch.addEventListener("mousemove", function (e) { if (isPitchDraged) { let diff = e.clientY - this.offsetTop; if (diff < 0) diff = 0; if (diff > 2 * centerPitch) diff = 2 * centerPitch; pitchValue = Math.round((centerPitch - diff) * 10 / centerPitch) / 10; } }); pitch.addEventListener("touchend", function (e) {
+                let isNoMore = true; for (let i = 0; i < e.touches.length; i++)
+                    if (e.touches[i].target == this) { isNoMore = false; break; }
+                if (isNoMore) releasePitch();
+            }); document.body.addEventListener("mouseup", function () { releaseMasks(); releasePitch(); }); document.body.addEventListener("touchend", function (e) {
+                if (isGliding) {
+                    let remains = []; for (let i = 0; i < e.touches.length; i++) { let touch = e.touches[i]; let element = document.elementFromPoint(touch.clientX, touch.clientY); if (element.getAttribute("id").indexOf("key2_") < 0) continue; let number = parseInt(element.getAttribute("number")); if (remains.indexOf(number) < 0) remains.push(number); }
+                    for (let i = 0; i < NOTES.length; i++)
+                        if (remains.indexOf(NOTES[i].number) < 0) NOTES[i].isPressed = false; isGliding = false;
+                }
+            }); window.addEventListener("resize", function () { isResizing = true; document.getElementById("tableTones").style.height = document.getElementById("tableRhythms").style.height = (divTransport.offsetHeight - (2 * document.getElementsByClassName("divTitles")[0].offsetHeight)) / 2; keyboard0.innerHTML = keyboard1.innerHTML = keyboard2.innerHTML = ""; renderKeyboard0(); renderKeyboard1(); renderKeyboard2(); ToneSectionRectCalc(); setMasks(); repositionWheels(); divPressContent.style.left = (document.body.offsetWidth - divPressContent.offsetWidth) / 2; divPressContent.style.top = (document.body.offsetHeight - divPressContent.offsetHeight) / 2; isResizing = false; }); btnTempoDown.addEventListener("click", function () { tempo -= 2; if (tempo < 50) tempo = 50; calcRealTempo(); }); btnTempoUp.addEventListener("click", function () { tempo += 2; if (tempo > 150) tempo = 150; calcRealTempo(); }); spanTempo.addEventListener("click", function () { loadDefaultTempo(); }); btnPrevious.addEventListener("click", function () { loadPreviousRhythm(); btnBlink.style.boxShadow = "none"; btnBlink = btnV1; }); btnNext.addEventListener("click", function () { loadNextRhythm(); btnBlink.style.boxShadow = "none"; btnBlink = btnV1; }); let loadedTracker = setInterval(function () { if (Loader.isAllLoaded()) { document.getElementById("imgSpinner").style.visibility = "hidden"; let btnGoOn = document.getElementById("btnGoOn"); btnGoOn.addEventListener("click", function () { currentTone.player.start(0); document.getElementById("divSplash").style.display = "none"; repositionKeyboards(); loadRhythm(0); isAllLoaded = true; }); btnGoOn.style.visibility = "visible"; clearInterval(loadedTracker); } }, TRACKER_PERIOD); keyTracker = setInterval(function () {
+                if (isResizing || !isAllLoaded || isMapping || isViewHelp) return; wheelValue.innerHTML = pitchValue; let h = Math.abs(centerPitch * pitchValue); if (pitchValue >= 0) { pitchLower.style.visibility = "hidden"; pitchUpper.style.visibility = "visible"; pitchUpper.style.height = h; pitchUpper.style.top = centerPitch - pitchUpper.offsetHeight; } else { pitchUpper.style.visibility = "hidden"; pitchLower.style.visibility = "visible"; pitchLower.style.height = h; pitchLower.style.top = centerPitch; }
+                for (let i = 0; i < NOTES.length; i++) { let currNumber = NOTES[i].number; let currName = NOTES[i].name; let thisKey0 = document.getElementById("key0_" + currNumber); let thisKey1 = document.getElementById("key1_" + currNumber); let thisKey2 = document.getElementById("key2_" + currNumber); if (NOTES[i].isPressed) { thisKey0.style.backgroundColor = "rgb(0, 64, 128)"; thisKey1.style.backgroundColor = "rgb(128, 0, 64)"; thisKey2.style.backgroundColor = "rgb(0, 128, 64)"; if (currNumber >= redMaskRange.left && currNumber <= redMaskRange.right) { if (redZone.indexOf(currName) < 0) redZone.push(currName); } else { if (greenZone.indexOf(currNumber) < 0) greenZone.push(currNumber); } } else { thisKey0.style.backgroundColor = thisKey1.style.backgroundColor = thisKey2.style.backgroundColor = "white"; let currRedNote = redZone.indexOf(currName); let currGreenNote = greenZone.indexOf(currNumber); if (currRedNote >= 0) redZone.splice(currRedNote, 1); if (currGreenNote >= 0) greenZone.splice(currGreenNote, 1); } }
+                for (let i = 0; i < MAXIMUM_NOTES_AVAILABLE; i++) { if (greenZone.indexOf(i) >= 0) { if (typeof TonePlayingState[i] == "undefined") { TonePlayingState[i] = currentTone.player.start(i); TonePlayingState[i].connect(reverbNode); } } else { if (typeof TonePlayingState[i] != "undefined") { TonePlayingState[i].stop(); TonePlayingState[i] = undefined; } } }
+                for (let i = 0; i < greenZone.length; i++)TonePlayingState[greenZone[i]].source.detune.value = pitchValue * 200; spanTempo.innerText = tempo; spanRhythm.innerText = currentRhythm.name; if (playState == "stop") { btnStart.innerText = "▶"; btnEnd.innerText = "Sync Start"; } else { btnStart.innerText = "◼"; btnEnd.innerText = "Ending"; }
+                if (isSyncOn)
+                    btnEnd.style.color = "yellow"; else
+                    btnEnd.style.color = "white";
+            }, TRACKER_PERIOD); chordTracker = setInterval(function () {
+                if (isViewHelp || isResizing || !isAllLoaded || redZone.length < 1) return; let redZoneSimple = []; for (let i = 0; i < redZone.length; i++) { var currName = redZone[i].substr(0, redZone[i].length - 1); if (redZoneSimple.indexOf(currName) < 0) redZoneSimple.push(currName); }
+                for (let i = 0; i < redZoneSimple.length - 1; i++)
+                    for (let j = i + 1; j < redZoneSimple.length; j++) { if (redZoneSimple[i] > redZoneSimple[j]) { let swap = redZoneSimple[i]; redZoneSimple[i] = redZoneSimple[j]; redZoneSimple[j] = swap; } }
+                for (let i = 0; i < chords.length; i++)
+                    if (chords[i].notes == redZoneSimple.toString()) {
+                        chord.name = chords[i].name; if (chord.name.indexOf("#") < 0)
+                            chord.root = chord.name.charAt(0); else
+                            chord.root = chord.name.substr(0, 2); let indexInBassArray = bass_root.indexOf(chord.root); if (chord.name.indexOf("m") < 0)
+                            chord.third = bass_3mj[indexInBassArray]; else
+                            chord.third = bass_3mn[indexInBassArray]; chord.fifth = bass_5th[indexInBassArray]; break;
+                    }
+                if (chord.name == "") { spanChord.innerText = "No Chord Detected"; } else { spanChord.innerText = "Chord: " + chord.name; if (isSyncOn) { isSyncOn = false; playState = "a"; setCurrentElement(playState); btnBlink = btnV1; } else if (playState == "stop") playChord(chord); }
+            }, TRACKER_PERIOD); btnBreak.onclick = function () { switch (playState) { case "stop": isSyncOn = false; playState = "fatoi"; setCurrentElement("fa"); break; case "i": playState = "fatoi"; setCurrentElement("fa"); break; case "a": playState = "fatoi"; setCurrentElement("fa"); break; case "fa": playState = "fatoi"; break; case "b": playState = "fbtoi"; setCurrentElement("fb"); break; case "fb": playState = "fbtoi"; break; case "e": playState = "etoi"; setCurrentElement("fb"); break; case "fbtoa": playState = "fbtoi"; break; case "fatob": playState = "fatoi"; break; case "fatoe": playState = "fatoi"; break; case "fbtoe": playState = "fbtoi"; break; } }; btnV1.onclick = function () { switch (playState) { case "stop": isSyncOn = false; setCurrentElement(playState = "fa"); break; case "a": playState = "fa"; setCurrentElement(playState); break; case "fa": playState = "a"; setCurrentElement(playState); break; case "fb": playState = "fbtoa"; break; case "b": playState = "fbtoa"; setCurrentElement("fb"); break; case "i": playState = "fa"; setCurrentElement(playState); case "e": playState = "etoa"; setCurrentElement("fa"); break; case "fatoi": playState = "fa"; break; case "fatob": playState = "fa"; break; case "fatoe": playState = "fa"; break; case "fbtoe": playState = "fbtoa"; break; case "fbtoi": playState = "fbtoa"; break; } }; btnV2.onclick = function () { switch (playState) { case "stop": isSyncOn = false; setCurrentElement(playState = "fb"); break; case "a": playState = "fatob"; setCurrentElement("fa"); break; case "fa": playState = "fatob"; break; case "b": playState = "fb"; setCurrentElement(playState); break; case "fb": playState = "b"; setCurrentElement(playState); break; case "i": playState = "itob"; setCurrentElement("fa"); break; case "e": playState = "etob"; setCurrentElement("fb"); break; case "fbtoi": playState = "fb"; break; case "fbtoa": playState = "fb"; break; case "fbtoe": playState = "fb"; break; case "fatoe": playState = "fatob"; break; case "fatoi": playState = "fatob"; break; } }; btnEnd.onclick = function () { switch (playState) { case "stop": isSyncOn = !isSyncOn; break; case "e": playState = "fbtoe"; setCurrentElement("fb"); break; case "a": playState = "fatoe"; setCurrentElement("fa"); break; case "fa": playState = "fatoe"; break; case "b": playState = "fbtoe"; setCurrentElement("fb"); break; case "fb": playState = "fbtoe"; break; case "i": playState = "itoe"; break; case "fatob": playState = "fatoe"; break; case "fbtoa": playState = "fbtoe"; break; case "fatoi": playState = "fatoe"; break; case "fbtoi": playState = "fbtoe"; break; } }; btnStart.onclick = function () { if (playState == "stop") { isSyncOn = false; playState = "a"; setCurrentElement(playState); btnBlink = btnV1; } else { playState = "stop"; stopAllBasses(); resetToFirstBeat(); btnBlink.style.boxShadow = "none"; numOfStops++; if (numOfStops >= 9 && isInterAdLoaded && !isAdShown) Android.showAd(); } }; btnReset.onclick = function () { resetToFirstBeat(); }
+            rhythmTracker = setInterval(function () {
+                if (isViewHelp || isMapping || isResizing || !isAllLoaded || playState == "stop") return; let index = buttonStateIndexes.indexOf(tick); if (index >= 0) btnBlink.style.boxShadow = "0 0 1vw " + buttonStates[index]; if (numOfMiliseconds % realTempo == 0) { playAtTick(tick); if (++tick >= TICKS_ONE_BAR) { tick = 0; numOfMiliseconds = -realTempo; switch (playState) { case "etoi": case "fatoi": case "fbtoi": setCurrentElement(playState = "i"); btnBlink = btnBreak; break; case "i": case "fa": case "fbtoa": case "etoa": setCurrentElement(playState = "a"); btnBlink = btnV1; break; case "fatob": case "itob": case "fb": case "etob": setCurrentElement(playState = "b"); btnBlink = btnV2; break; case "e": playState = "stop"; stopAllBasses(); resetToFirstBeat(); btnBlink.style.boxShadow = "none"; break; case "fatoe": case "fbtoe": case "itoe": setCurrentElement(playState = "e"); btnBlink = btnEnd; break; } } }
+                numOfMiliseconds++;
+            }, 1); WebMidi.enable().then(onEnabled).catch(err => onError(err)); function onEnabled() {
+                if (WebMidi.inputs.length < 1) spanExMIDI.innerText = "No MIDI Controller Detected"; else spanExMIDI.innerText = "MIDI Controller: " + WebMidi.inputs[0].name; const MIDIController = WebMidi.inputs[0].channels[1]; MIDIController.addListener("pitchbend", e => { pitchValue = Math.round(e.value * 10) / 10; }); MIDIController.addListener("noteon", e => {
+                    for (let i = 0; i < NOTES.length; i++)
+                        if (NOTES[i].number == e.note.number) NOTES[i].isPressed = true;
+                }); MIDIController.addListener("noteoff", e => {
+                    for (let i = 0; i < NOTES.length; i++)
+                        if (NOTES[i].number == e.note.number) NOTES[i].isPressed = false;
+                }); MIDIController.addListener("controlchange", function (e) {
+                    if (e.value == 0) return; let cc = e.controller.number.toString(); if (isLearning) { MappingCCs[learningIndex] = cc; MappingCCButtons[learningIndex].innerText = cc; localStorage.setItem("CC" + learningIndex, cc); divPress.style.visibility = "hidden"; isLearning = false; return; }
+                    let index = MappingCCs.indexOf(cc); if (index >= 0) MappingFunctionButtons[index].click();
+                });
+            }
+            function onError(e) { spanExMIDI.innerText = "No MIDI Controller Detected"; }
+        });/*]]>*/</script>
+</head>
+
+<body oncontextmenu="return false">
+    <div id="divSplash">
+        <div id="divSplashDim"></div>
+        <img id="imgLogo" src="images/tht_logo.jpg" /><br />
+        <p><img style="width: 300px;" id="imgSpinner" src="images/spinner.gif" /><br />Music Arranger Keyboard</p>
+        <button id="btnGoOn">Continue</button>
+    </div>
+    <div id="divTransport">
+        <div id="divTone">
+            <div class="divTitles" style="background-image:linear-gradient(to bottom right,#008040,#00c080)">Instruments
+                <span id="spanExMIDI"></span>
+            </div>
+            <table id="tableTones"></table>
+        </div>
+        <div id="divRhythm">
+            <div class="divTitles" style="background-image:linear-gradient(to bottom right,#800040,#c00080)">Backing
+                Band <span id="spanChord">No Chord Detected</span></div>
+            <table id="tableRhythms">
+                <tr id="trRhythms">
+                    <td class="tdDivider">&nbsp;&bull;&nbsp;</td>
+                    <td class="tdController"><button class="btnRhythm" id="btnBreak">Break</button></td>
+                    <td class="tdController"><button class="btnRhythm" id="btnV1">A</button></td>
+                    <td class="tdController"><button class="btnRhythm" id="btnV2">B</button></td>
+                    <td class="tdController"><button class="btnRhythm" id="btnEnd">End/Sync</button></td>
+                    <td class="tdController"><button class="btnRhythm" id="btnStart">Start</button></td>
+                    <td class="tdDivider">&nbsp;&bull;&nbsp;</td>
+                    <td class="tdShort"><button class="btnRhythm" id="btnReset">↺</button></td>
+                    <td class="tdDivider">&nbsp;&bull;&nbsp;</td>
+                    <td class="tdShort"><button class="btnRhythm" id="btnTempoDown">▼</td>
+                    <td class="tdShort"><span class="spanTitle">Tempo</span><br /><span id="spanTempo"></span></td>
+                    <td class="tdShort"><button class="btnRhythm" id="btnTempoUp">▲</button></td>
+                    <td class="tdDivider">&nbsp;&bull;&nbsp;</td>
+                    <td class="tdShort"><button class="btnRhythm" id="btnPrevious">▼</button></td>
+                    <td class="tdController"><span class="spanTitle">Rhythm</span><br /><span id="spanRhythm"></span>
+                    </td>
+                    <td class="tdShort"><button class="btnRhythm" id="btnNext">▲</button></td>
+                    <td class="tdDivider">&nbsp;&bull;&nbsp;</td>
+                    <td class="tdShort"><button id="btnHelp">Help?</button></td>
+                    <td class="tdDivider">&nbsp;&bull;&nbsp;</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div id="divKeyboards">
+        <div id="divWhole"></div>
+        <div id="div_1">
+            <div id="divWheels">
+                <div id="divPitchTitle" class="divTitles"
+                    style="background-image:linear-gradient(to bottom right,#004080,#0080c0)">Bend</div>
+                <div id="divPitch">
+                    <div id="divUpper"></div>
+                    <div id="divLower"></div>
+                </div>
+                <div id="divMid"></div>
+                <div id="divWheelValue">0</div>
+            </div>
+            <div id="divTwin">
+                <div class="divTitles" style="background-image:linear-gradient(to bottom right,#800040,#c00080)">
+                    Accompaniment Keyboard</div>
+                <div id="divAcmpSection" class="divKeyboard">
+                    <div id="divKey1"></div>
+                </div>
+                <div id="divSectionTone" class="divTitles"
+                    style="background-image:linear-gradient(to bottom right,#008040,#00c080)">Tone Keyboard</div>
+                <div id="divToneSection" class="divKeyboard">
+                    <div id="divKey2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="divMapping">
+        <div class="divTitles" style="background-image:linear-gradient(to bottom right,#004080,#0080c0)">MIDI Controller
+            Mapping <button id="btnMappingClose">Close</button></div>
+        <div id="div2">
+            <table id="tableMapping">
+                <tr class="tableHeader">
+                    <td style="width:49%">Function</td>
+                    <td>-</td>
+                    <td style="width:49%">Control Change (CC)</td>
+                </tr>
+            </table>
+            <div id="divPress">
+                <div id="divPressContent">Press the corresponding control on your MIDI Controller!</div>
+            </div>
+        </div>
+    </div>
+    <div id="divHelp">
+        <div class="divTitles" style="background-image:linear-gradient(to bottom right,#004080,#0080c0)">How to use this
+            app? <button id="btnHelpClose">Close</button></div>
+        <iframe id="frmHelp" src="help/help.html"></iframe>
+    </div>
+</body>
+
+</html>

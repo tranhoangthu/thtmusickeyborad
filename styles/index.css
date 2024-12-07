@@ -1,0 +1,305 @@
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-size: 1.5vw;
+    font-family: sans-serif;
+    user-select: none;
+    text-shadow: .1vw .1vw .25vw black, 0 0 5vw #008040, 0 0 1vw #004020
+}
+
+#divSplash {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
+    background-color: white;
+    text-align: center
+}
+
+#divSplashDim {
+    position: fixed;
+    width: 99%;
+    height: 98%;
+    transform: translate(0.5vw, 1vh);
+    background-image: url("../images/background.jpg");
+    background-size: cover;
+    box-shadow: 0 0 2vw #008040;
+    border-radius: 1vw;
+    opacity: .2
+}
+
+#imgSpinner {
+    width: 5%
+}
+
+#imgLogo {
+    width: 20%
+}
+
+button {
+    font-size: 1.25vw;
+    border-radius: .5vw;
+    background-image: linear-gradient(to bottom, #004080, #0080c0);
+    color: white;
+    border-radius: 1vw;
+    padding: 1vw;
+    border: 1px solid #00e0ff;
+    box-shadow: 0 0 .5vw #00e0ff
+}
+
+#btnGoOn {
+    position: fixed;
+    width: 20vw;
+    transform: translateX(-50%);
+    bottom: 2vh;
+    visibility: hidden
+}
+
+#divTransport {
+    width: 100%;
+    height: 27%;
+    background-image: linear-gradient(to bottom, lightgray, white)
+}
+
+#divTone {
+    width: 100%;
+    height: 50%
+}
+
+table {
+    width: 100%
+}
+
+td {
+    text-align: center
+}
+
+button.btnTone {
+    background-image: linear-gradient(to bottom, #004020, #008040);
+    color: white;
+    border: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: none
+}
+
+button.btnRhythm {
+    background-image: linear-gradient(to bottom, #800040, #c00080);
+    color: white;
+    border: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: none
+}
+
+#btnStart {
+    font-weight: bold
+}
+
+#divRhythm {
+    width: 100%;
+    height: 50%
+}
+
+.spanTitle {
+    font-size: .8vw
+}
+
+#spanRhythm,
+#spanTempo {
+    font-size: 1.5vw
+}
+
+.tdController {
+    width: 10%
+}
+
+.tdShort {
+    width: 5%
+}
+
+.tdDivider {
+    width: 1%;
+    font-size: 1vw
+}
+
+#divKeyboards {
+    width: 100%;
+    height: 73%
+}
+
+#divWhole {
+    width: 100%;
+    height: 10%
+}
+
+#div_1 {
+    width: 100%;
+    height: 90%
+}
+
+#divWheels {
+    float: left;
+    width: 7.5%;
+    height: 107%;
+    background-image: linear-gradient(to top, lightgray, white)
+}
+
+#divTwin {
+    width: 100%;
+    height: 100%
+}
+
+.divTitles {
+    width: 100%;
+    text-align: center;
+    color: white;
+    padding: .25vw 0 .25vw 0;
+    z-index: 9999
+}
+
+.divKeyboard {
+    width: 92.5%;
+    margin: auto;
+    position: relative;
+    overflow: hidden
+}
+
+.spanWhiteNote {
+    background-image: linear-gradient(to bottom right, rgba(128, 128, 64, 0.25), white);
+    position: absolute;
+    top: inherit;
+    display: inline-block;
+    color: black
+}
+
+.spanBlackNote {
+    background-image: linear-gradient(to bottom right, black, rgba(64, 80, 80, 0.5));
+    border: .1vw solid rgba(255, 255, 255, 0.5);
+    border-radius: .5vw;
+    position: absolute;
+    top: inherit;
+    display: inline-block;
+    color: white;
+    z-index: 9997
+}
+
+#divRedMask {
+    position: absolute;
+    top: inherit;
+    background-color: rgba(128, 0, 64, 0.5);
+    z-index: 9998
+}
+
+#divGreenMask {
+    position: absolute;
+    top: inherit;
+    background-color: rgba(0, 128, 64, 0.5);
+    z-index: 9998
+}
+
+#divKey1,
+#divKey2 {
+    height: 100%;
+    position: relative
+}
+
+#divPitch {
+    background-image: linear-gradient(to bottom right, black, #004080);
+    position: relative;
+    width: 75%;
+    height: 72.5%;
+    border-radius: 1vw
+}
+
+#divUpper {
+    background-image: linear-gradient(to bottom, #00e0ff, #004080);
+    position: absolute;
+    border-radius: 1vw
+}
+
+#divMid {
+    background-image: linear-gradient(to bottom right, #004080, #0080c0);
+    box-shadow: 0 0 1vw #00e0ff;
+    position: absolute;
+    height: 1vh;
+    z-index: 9999
+}
+
+#divLower {
+    background-image: linear-gradient(to bottom, #004080, #00e0ff);
+    position: absolute;
+    border-radius: 1vw
+}
+
+#divWheelValue {
+    position: absolute;
+    text-align: center;
+    z-index: 9999
+}
+
+#btnHelp {
+    width: 100%;
+    height: 100%
+}
+
+#spanExMIDI,
+#spanChord {
+    background-image: linear-gradient(to bottom right, #004080, #0080c0);
+    border-radius: 1vw;
+    color: white;
+    box-shadow: 0 0 1vw #00e0ff;
+    border: 1px solid #00e0ff;
+    padding: 0 1vw 0 1vw
+}
+
+#divMapping,
+#divHelp {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 99998;
+    visibility: hidden;
+    background-image: linear-gradient(to bottom right, #ffffff, #e0e0e0)
+}
+
+#div2 {
+    width: 100%;
+    height: 90%;
+    overflow-x: none;
+    overflow-y: scroll
+}
+
+#divPress {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 99999;
+    visibility: hidden
+}
+
+#divPressContent {
+    position: fixed;
+    border-radius: 1vw;
+    border: 1px solid #00e0ff;
+    padding: 1vw;
+    background-image: linear-gradient(to bottom right, #ffffff, #e0e0e0)
+}
+
+.tableHeader {
+    font-size: 1.5vw
+}
+
+#frmHelp {
+    width: 100%;
+    height: 90%;
+    border: 0
+}
